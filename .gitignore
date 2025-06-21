@@ -12,6 +12,9 @@ dist/
 wp-config.php
 .htaccess
 
+# Development tools
+.cursor/
+
 # IDE and editor files
 .vscode/
 .idea/
