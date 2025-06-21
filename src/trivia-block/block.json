@@ -1,0 +1,61 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "trivia-block/trivia",
+	"version": "1.0.0",
+	"title": "Trivia Question",
+	"category": "widgets",
+	"icon": "lightbulb",
+	"description": "Create interactive trivia questions with multiple choice answers and automatic scoring.",
+	"keywords": [
+		"trivia",
+		"quiz",
+		"question",
+		"interactive",
+		"education"
+	],
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"customClassName": true
+	},
+	"attributes": {
+		"question": {
+			"type": "string",
+			"default": ""
+		},
+		"options": {
+			"type": "array",
+			"default": ["", ""]
+		},
+		"correctAnswer": {
+			"type": "number",
+			"default": 0
+		},
+		"blockId": {
+			"type": "string",
+			"default": ""
+		},
+		"resultMessages": {
+			"type": "object",
+			"default": {
+				"excellent": "🏆 Trivia Master!",
+				"good": "🎉 Great Job!",
+				"okay": "👍 Not Bad!",
+				"poor": "🤔 Keep Trying!"
+			}
+		},
+		"scoreRanges": {
+			"type": "object",
+			"default": {
+				"excellent": 90,
+				"good": 70,
+				"okay": 50
+			}
+		}
+	},
+	"textdomain": "trivia-block",
+	"editorScript": "file:../../build/index.js",
+	"editorStyle": "file:../../assets/css/trivia-block-editor.css",
+	"style": "file:../../assets/css/trivia-block-frontend.css"
+} 

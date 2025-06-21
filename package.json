@@ -1,0 +1,53 @@
+{
+  "name": "trivia-block",
+  "version": "1.0.0",
+  "description": "A Gutenberg block for creating interactive trivia questions with real-time scoring",
+  "author": "Chris Huber <chris@chubes.net>",
+  "license": "GPL-2.0-or-later",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "wp-scripts build",
+    "check-engines": "wp-scripts check-engines",
+    "check-licenses": "wp-scripts check-licenses",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "lint:md:docs": "wp-scripts lint-md-docs",
+    "lint:pkg-json": "wp-scripts lint-pkg-json",
+    "packages-update": "wp-scripts packages-update",
+    "plugin-zip": "wp-scripts plugin-zip",
+    "start": "wp-scripts start",
+    "test:e2e": "wp-scripts test-e2e",
+    "test:unit": "wp-scripts test-unit-js",
+    "dist": "./build-dist.sh"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^26.18.0"
+  },
+  "dependencies": {
+    "@wordpress/block-editor": "^12.19.0",
+    "@wordpress/blocks": "^12.28.0",
+    "@wordpress/components": "^25.16.0",
+    "@wordpress/data": "^9.21.0",
+    "@wordpress/element": "^5.28.0",
+    "@wordpress/i18n": "^4.51.0",
+    "@wordpress/icons": "^9.42.0"
+  },
+  "keywords": [
+    "wordpress",
+    "gutenberg",
+    "block",
+    "trivia",
+    "quiz",
+    "interactive",
+    "education"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chubes/trivia-block.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chubes/trivia-block/issues"
+  },
+  "homepage": "https://chubes.net/trivia-block"
+} 
