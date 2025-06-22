@@ -13,6 +13,7 @@ import {
 	ToggleControl,
 	Notice,
 	TextControl,
+	TextareaControl,
 	RangeControl
 } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
@@ -31,7 +32,7 @@ import { select, dispatch } from '@wordpress/data';
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  */
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { question, options, correctAnswer, blockId, resultMessages, scoreRanges } = attributes;
+	const { question, options, correctAnswer, answerJustification, blockId, resultMessages, scoreRanges } = attributes;
 
 	// Generate a unique block ID if one doesn't exist
 	useEffect( () => {
@@ -56,6 +57,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		const newOptions = [ ...options ];
 		newOptions[ index ] = newValue;
 		setAttributes( { options: newOptions } );
+	};
+
+	// Update answer justification
+	const onChangeAnswerJustification = ( newJustification ) => {
+		setAttributes( { answerJustification: newJustification } );
 	};
 
 	// Add new option
@@ -113,11 +119,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		syncResultMessagesAcrossBlocks( resultMessages, newRanges );
 	};
 
-	// Validation
-	const hasEmptyOptions = options.some( option => option.trim() === '' );
-	const hasQuestion = question.trim() !== '';
-	const isValid = hasQuestion && ! hasEmptyOptions;
-
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>
@@ -126,13 +127,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						{ __( 'Configure your trivia question options and select the correct answer.', 'trivia-block' ) }
 					</p>
 					
-					{ ! isValid && (
-						<Notice status="warning" isDismissible={ false }>
-							{ ! hasQuestion && __( 'Please add a question.', 'trivia-block' ) }
-							{ hasQuestion && hasEmptyOptions && __( 'Please fill in all answer options.', 'trivia-block' ) }
-						</Notice>
-					) }
-
 					<div style={ { marginTop: '16px' } }>
 						<strong>{ __( 'Answer Options:', 'trivia-block' ) }</strong>
 						{ options.map( ( option, index ) => (
@@ -293,19 +287,16 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					) ) }
 				</div>
 
-				{ ! isValid && (
-					<div className="trivia-block-editor__validation">
-						<Notice status="warning" isDismissible={ false }>
-							{ __( 'Complete the question and all options to preview how this will appear to users.', 'trivia-block' ) }
-						</Notice>
-					</div>
-				) }
-
-				{ isValid && (
-					<div className="trivia-block-editor__preview">
-						<p><em>{ __( 'Preview: This is how your trivia question will appear to users.', 'trivia-block' ) }</em></p>
-					</div>
-				) }
+				<div className="trivia-block-editor__justification">
+					<TextareaControl
+						label={ __( '💡 Answer Justification (Optional)', 'trivia-block' ) }
+						help={ __( 'Explain why the correct answer is right. This will appear after users make their selection.', 'trivia-block' ) }
+						value={ answerJustification }
+						onChange={ onChangeAnswerJustification }
+						placeholder={ __( 'Provide an explanation for the correct answer...', 'trivia-block' ) }
+						rows={ 3 }
+					/>
+				</div>
 			</div>
 		</div>
 	);

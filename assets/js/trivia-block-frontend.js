@@ -11,7 +11,8 @@
         totalQuestions: 0,
         correctAnswers: 0,
         answeredQuestions: new Set(),
-        scoreElement: null,
+        topScoreElement: null,
+        bottomScoreElement: null,
         resultMessages: {
             excellent: '🏆 Trivia Master!',
             good: '🎉 Great Job!',
@@ -108,6 +109,8 @@
         const isCorrect = selectedIndex === correctAnswer;
         const selectedOption = options[selectedIndex];
         const feedbackElement = blockElement.querySelector('.trivia-block__feedback');
+        const justificationElement = blockElement.querySelector('.trivia-block__justification');
+        const answerJustification = blockElement.getAttribute('data-answer-justification');
 
         // Update score if correct
         if (isCorrect) {
@@ -142,6 +145,15 @@
                 '✗ Not quite right. The correct answer is highlighted above.';
         }
 
+        // Show answer justification if it exists
+        if (justificationElement && answerJustification && answerJustification.trim() !== '') {
+            justificationElement.style.display = 'block';
+            // Add a slight delay to make the justification appear after the feedback
+            setTimeout(() => {
+                justificationElement.classList.add('is-visible');
+            }, 300);
+        }
+
         // Update score display
         updateScoreDisplay();
 
@@ -155,54 +167,74 @@
     }
 
     /**
-     * Create score display element
+     * Create score display elements at top and bottom
      */
     function createScoreDisplay() {
         const firstTriviaBlock = document.querySelector('.trivia-block');
-        if (!firstTriviaBlock) {
+        const lastTriviaBlock = document.querySelector('.trivia-block:last-of-type');
+        
+        if (!firstTriviaBlock || !lastTriviaBlock) {
             return;
         }
 
-        const scoreElement = document.createElement('div');
-        scoreElement.className = 'trivia-score';
-        scoreElement.innerHTML = `
+        // Create top score element
+        const topScoreElement = document.createElement('div');
+        topScoreElement.className = 'trivia-score trivia-score--top';
+        topScoreElement.innerHTML = `
             <div class="trivia-score__current">0/${triviaState.totalQuestions}</div>
             <div class="trivia-score__label">Questions Correct</div>
         `;
 
-        // Insert before first trivia block
-        firstTriviaBlock.parentNode.insertBefore(scoreElement, firstTriviaBlock);
-        triviaState.scoreElement = scoreElement;
+        // Create bottom score element (initially hidden)
+        const bottomScoreElement = document.createElement('div');
+        bottomScoreElement.className = 'trivia-score trivia-score--bottom';
+        bottomScoreElement.style.display = 'none';
+        bottomScoreElement.innerHTML = `
+            <div class="trivia-score__current">0/${triviaState.totalQuestions}</div>
+            <div class="trivia-score__label">Final Results</div>
+        `;
+
+        // Insert top score before first trivia block
+        firstTriviaBlock.parentNode.insertBefore(topScoreElement, firstTriviaBlock);
+        
+        // Insert bottom score after last trivia block
+        lastTriviaBlock.parentNode.insertBefore(bottomScoreElement, lastTriviaBlock.nextSibling);
+
+        triviaState.topScoreElement = topScoreElement;
+        triviaState.bottomScoreElement = bottomScoreElement;
     }
 
     /**
-     * Update score display
+     * Update score displays
      */
     function updateScoreDisplay() {
-        if (!triviaState.scoreElement) {
-            return;
+        // Update top score display
+        if (triviaState.topScoreElement) {
+            const currentElement = triviaState.topScoreElement.querySelector('.trivia-score__current');
+            if (currentElement) {
+                currentElement.textContent = `${triviaState.correctAnswers}/${triviaState.totalQuestions}`;
+            }
+
+            // Add animation class
+            triviaState.topScoreElement.classList.add('score-updated');
+            setTimeout(() => {
+                triviaState.topScoreElement.classList.remove('score-updated');
+            }, 300);
         }
 
-        const currentElement = triviaState.scoreElement.querySelector('.trivia-score__current');
-        if (currentElement) {
-            currentElement.textContent = `${triviaState.correctAnswers}/${triviaState.totalQuestions}`;
+        // Update bottom score display if visible
+        if (triviaState.bottomScoreElement && triviaState.bottomScoreElement.style.display !== 'none') {
+            const currentElement = triviaState.bottomScoreElement.querySelector('.trivia-score__current');
+            if (currentElement) {
+                currentElement.textContent = `${triviaState.correctAnswers}/${triviaState.totalQuestions}`;
+            }
         }
-
-        // Add animation class
-        triviaState.scoreElement.classList.add('score-updated');
-        setTimeout(() => {
-            triviaState.scoreElement.classList.remove('score-updated');
-        }, 300);
     }
 
     /**
      * Show final results when all questions are answered
      */
     function showFinalResults() {
-        if (!triviaState.scoreElement) {
-            return;
-        }
-
         const percentage = Math.round((triviaState.correctAnswers / triviaState.totalQuestions) * 100);
         let resultMessage = '';
         let resultClass = '';
@@ -222,16 +254,45 @@
             resultClass = 'result-poor';
         }
 
-        // Update score display with final results
-        setTimeout(() => {
-            const labelElement = triviaState.scoreElement.querySelector('.trivia-score__label');
-            if (labelElement) {
-                labelElement.innerHTML = `
-                    <div class="trivia-score__result ${resultClass}">${resultMessage}</div>
-                    <div class="trivia-score__percentage">${percentage}% Correct</div>
-                `;
-            }
-        }, 500);
+        // Update top score with final results
+        if (triviaState.topScoreElement) {
+            setTimeout(() => {
+                const labelElement = triviaState.topScoreElement.querySelector('.trivia-score__label');
+                if (labelElement) {
+                    labelElement.innerHTML = `
+                        <div class="trivia-score__result ${resultClass}">${resultMessage}</div>
+                        <div class="trivia-score__percentage">${percentage}% Correct</div>
+                    `;
+                }
+            }, 500);
+        }
+
+        // Show and populate bottom score with final results
+        if (triviaState.bottomScoreElement) {
+            setTimeout(() => {
+                // Update content first
+                const currentElement = triviaState.bottomScoreElement.querySelector('.trivia-score__current');
+                const labelElement = triviaState.bottomScoreElement.querySelector('.trivia-score__label');
+                
+                if (currentElement) {
+                    currentElement.textContent = `${triviaState.correctAnswers}/${triviaState.totalQuestions}`;
+                }
+                
+                if (labelElement) {
+                    labelElement.innerHTML = `
+                        <div class="trivia-score__result ${resultClass}">${resultMessage}</div>
+                        <div class="trivia-score__percentage">${percentage}% Correct</div>
+                    `;
+                }
+
+                // Show the bottom score with animation
+                triviaState.bottomScoreElement.style.display = 'block';
+                triviaState.bottomScoreElement.classList.add('score-updated');
+                setTimeout(() => {
+                    triviaState.bottomScoreElement.classList.remove('score-updated');
+                }, 600);
+            }, 800);
+        }
     }
 
     /**
@@ -276,7 +337,8 @@
             totalQuestions: 0,
             correctAnswers: 0,
             answeredQuestions: new Set(),
-            scoreElement: null,
+            topScoreElement: null,
+            bottomScoreElement: null,
             resultMessages: {
                 excellent: '🏆 Trivia Master!',
                 good: '🎉 Great Job!',
@@ -294,6 +356,7 @@
         triviaBlocks.forEach(block => {
             const options = block.querySelectorAll('.trivia-block__option');
             const feedback = block.querySelector('.trivia-block__feedback');
+            const justification = block.querySelector('.trivia-block__justification');
 
             options.forEach(option => {
                 option.disabled = false;
@@ -304,11 +367,23 @@
                 feedback.style.display = 'none';
                 feedback.textContent = '';
             }
+
+            if (justification) {
+                justification.style.display = 'none';
+                justification.classList.remove('is-visible');
+            }
         });
 
-        const scoreElement = document.querySelector('.trivia-score');
-        if (scoreElement) {
-            scoreElement.remove();
+        // Remove both score elements
+        const topScoreElement = document.querySelector('.trivia-score--top');
+        const bottomScoreElement = document.querySelector('.trivia-score--bottom');
+        
+        if (topScoreElement) {
+            topScoreElement.remove();
+        }
+        
+        if (bottomScoreElement) {
+            bottomScoreElement.remove();
         }
 
         initTriviaBlocks();

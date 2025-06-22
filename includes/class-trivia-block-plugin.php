@@ -51,7 +51,7 @@ class Trivia_Block_Plugin {
 	public function register_block() {
 		// Register the block type
 		register_block_type(
-			TRIVIA_BLOCK_PLUGIN_DIR . 'src/trivia-block',
+			TRIVIA_BLOCK_PLUGIN_DIR . 'build/trivia-block',
 			array(
 				'render_callback' => array( $this, 'render_block' ),
 			)
@@ -70,6 +70,7 @@ class Trivia_Block_Plugin {
 		$question = isset( $attributes['question'] ) ? $attributes['question'] : '';
 		$options = isset( $attributes['options'] ) ? $attributes['options'] : array( '', '' );
 		$correct_answer = isset( $attributes['correctAnswer'] ) ? $attributes['correctAnswer'] : 0;
+		$answer_justification = isset( $attributes['answerJustification'] ) ? $attributes['answerJustification'] : '';
 		$block_id = isset( $attributes['blockId'] ) ? $attributes['blockId'] : uniqid( 'trivia_' );
 		$result_messages = isset( $attributes['resultMessages'] ) ? $attributes['resultMessages'] : array(
 			'excellent' => '🏆 Trivia Master!',
@@ -87,6 +88,7 @@ class Trivia_Block_Plugin {
 		$question = wp_kses_post( $question );
 		$options = array_map( 'sanitize_text_field', $options );
 		$correct_answer = intval( $correct_answer );
+		$answer_justification = wp_kses_post( $answer_justification );
 
 		// Don't render if question is empty
 		if ( empty( $question ) || empty( array_filter( $options ) ) ) {
@@ -99,6 +101,7 @@ class Trivia_Block_Plugin {
 		<div class="trivia-block" 
 			data-block-id="<?php echo esc_attr( $block_id ); ?>" 
 			data-correct-answer="<?php echo esc_attr( $correct_answer ); ?>"
+			data-answer-justification="<?php echo esc_attr( $answer_justification ); ?>"
 			data-result-messages="<?php echo esc_attr( wp_json_encode( $result_messages ) ); ?>"
 			data-score-ranges="<?php echo esc_attr( wp_json_encode( $score_ranges ) ); ?>">
 			<div class="trivia-block__question">
@@ -118,6 +121,13 @@ class Trivia_Block_Plugin {
 				<?php endforeach; ?>
 			</div>
 			<div class="trivia-block__feedback" style="display: none;"></div>
+			<?php if ( ! empty( $answer_justification ) ) : ?>
+				<div class="trivia-block__justification" style="display: none;">
+					<div class="trivia-block__justification-content">
+						<?php echo $answer_justification; ?>
+					</div>
+				</div>
+			<?php endif; ?>
 		</div>
 		<?php
 		return ob_get_clean();

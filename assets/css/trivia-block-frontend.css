@@ -51,7 +51,7 @@
 	padding: 24px;
 	border: 1px solid var(--trivia-border);
 	border-radius: 8px;
-	background: var(--trivia-card-bg);
+	background: var(--background-color);
 	box-shadow: var(--trivia-shadow);
 	color: var(--trivia-text);
 	font-family: inherit;
@@ -181,10 +181,47 @@
 	border: 1px solid var(--trivia-incorrect);
 }
 
+/* Answer justification styling */
+.trivia-block__justification {
+	margin-top: 12px;
+	padding: 16px;
+	background: var(--trivia-notice-bg);
+	border: 1px solid var(--trivia-notice-border);
+	border-radius: 6px;
+	opacity: 0;
+	transform: translateY(-10px);
+	transition: all 0.4s ease;
+}
+
+.trivia-block__justification.is-visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.trivia-block__justification-content {
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--trivia-text);
+}
+
+.trivia-block__justification-content p {
+	margin: 0 0 8px 0;
+}
+
+.trivia-block__justification-content p:last-child {
+	margin-bottom: 0;
+}
+
+/* Add a subtle icon before justification */
+.trivia-block__justification::before {
+	content: "💡";
+	display: inline-block;
+	margin-right: 8px;
+	font-size: 16px;
+}
+
 /* Score display component */
 .trivia-score {
-	position: sticky;
-	top: 20px;
 	margin: 20px 0;
 	padding: 16px 20px;
 	background: var(--trivia-notice-bg);
@@ -193,9 +230,19 @@
 	text-align: center;
 	font-weight: 600;
 	color: var(--trivia-text);
-	z-index: 10;
 	transition: all 0.3s ease;
 	box-shadow: var(--trivia-shadow);
+}
+
+.trivia-score--top {
+	margin-bottom: 24px;
+}
+
+.trivia-score--bottom {
+	margin-top: 24px;
+	background: var(--trivia-correct-bg);
+	border-color: var(--trivia-correct);
+	animation: fadeInUp 0.5s ease;
 }
 
 .trivia-score.score-updated {
@@ -204,7 +251,7 @@
 }
 
 .trivia-score__current {
-	font-size: 24px;
+	font-size: 20px;
 	color: var(--trivia-link-color);
 	transition: all 0.3s ease;
 }
@@ -317,6 +364,15 @@
 		font-size: 15px;
 	}
 
+	.trivia-block__justification {
+		padding: 14px;
+		font-size: 14px;
+	}
+
+	.trivia-block__justification-content {
+		font-size: 13px;
+	}
+
 	.trivia-score {
 		position: relative;
 		top: auto;
@@ -339,5 +395,22 @@
 	.trivia-block__option {
 		padding: 12px 14px;
 		font-size: 14px;
+	}
+
+	.trivia-block__justification {
+		padding: 12px;
+		margin-top: 10px;
+	}
+
+	.trivia-block__justification-content {
+		font-size: 12px;
+	}
+
+	.trivia-block__justification::before {
+		font-size: 14px;
+	}
+
+	.trivia-score__current {
+		font-size: 18px;
 	}
 } 

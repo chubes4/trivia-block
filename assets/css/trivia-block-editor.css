@@ -156,6 +156,81 @@
 	box-shadow: var(--trivia-shadow);
 }
 
+/* Answer justification in editor */
+.trivia-block-editor__justification {
+	margin-top: 20px;
+	padding: 16px;
+	background: var(--trivia-notice-bg);
+	border: 2px dashed var(--trivia-border);
+	border-radius: 6px;
+	transition: all 0.2s ease;
+}
+
+.trivia-block-editor__justification:hover {
+	border-color: var(--trivia-link-color);
+	box-shadow: var(--trivia-shadow);
+}
+
+.trivia-block-editor__justification .components-base-control {
+	margin-bottom: 0;
+}
+
+.trivia-block-editor__justification .components-base-control__label {
+	font-weight: 600;
+	color: var(--trivia-text);
+	margin-bottom: 8px;
+}
+
+.trivia-block-editor__justification .components-base-control__help {
+	color: var(--trivia-muted-text);
+	font-size: 13px;
+	margin-top: 6px;
+}
+
+.trivia-block-editor__justification .components-textarea-control__input {
+	border: 1px solid var(--trivia-border);
+	border-radius: 4px;
+	padding: 12px;
+	background: var(--trivia-card-bg);
+	color: var(--trivia-text);
+	font-family: inherit;
+	font-size: 14px;
+	line-height: 1.5;
+	transition: all 0.2s ease;
+}
+
+.trivia-block-editor__justification .components-textarea-control__input:focus {
+	border-color: var(--trivia-focus-border);
+	box-shadow: var(--trivia-focus-shadow);
+	outline: none;
+}
+
+/* Webkit placeholder styling for justification textarea */
+.trivia-block-editor__justification .components-textarea-control__input::-webkit-input-placeholder {
+	color: var(--trivia-muted-text);
+	opacity: 1;
+}
+
+.trivia-block-editor__justification .components-textarea-control__input::-moz-placeholder {
+	color: var(--trivia-muted-text);
+	opacity: 1;
+}
+
+.trivia-block-editor__justification .components-textarea-control__input:-moz-placeholder {
+	color: var(--trivia-muted-text);
+	opacity: 1;
+}
+
+.trivia-block-editor__justification .components-textarea-control__input:-ms-input-placeholder {
+	color: var(--trivia-muted-text);
+	opacity: 1;
+}
+
+.trivia-block-editor__justification .components-textarea-control__input::placeholder {
+	color: var(--trivia-muted-text);
+	opacity: 1;
+}
+
 .trivia-block-editor__validation {
 	margin-top: 16px;
 	padding: 16px;
@@ -195,7 +270,6 @@
 
 /* Custom styling for correct answer toggle in inspector */
 .components-panel__body .components-toggle-control {
-	background: var(--trivia-card-bg);
 	border: 1px solid var(--trivia-border);
 	border-radius: 4px;
 	padding: 12px;
@@ -211,17 +285,6 @@
 	background-color: var(--trivia-accent);
 }
 
-/* Add/remove button styling */
-.components-button.is-secondary {
-	border-color: var(--trivia-border);
-	color: var(--trivia-text);
-	background: var(--trivia-card-bg);
-}
-
-.components-button.is-secondary:hover {
-	border-color: var(--trivia-link-color);
-	color: var(--trivia-link-color);
-}
 
 .components-button.is-destructive {
 	border-color: #d63638;
@@ -250,7 +313,18 @@
 	.trivia-block-editor__option-input {
 		font-size: 15px !important;
 	}
+
+	.trivia-block-editor__justification {
+		padding: 14px;
+		margin-top: 16px;
+	}
+
+	.trivia-block-editor__justification .components-textarea-control__input {
+		font-size: 13px;
+		padding: 10px;
+	}
 }
+
 
 @media (max-width: 480px) {
 	.trivia-block-editor {
@@ -268,5 +342,15 @@
 
 	.trivia-block-editor__option-input {
 		font-size: 14px !important;
+	}
+
+	.trivia-block-editor__justification {
+		padding: 12px;
+		margin-top: 14px;
+	}
+
+	.trivia-block-editor__justification .components-textarea-control__input {
+		font-size: 12px;
+		padding: 8px;
 	}
 } 
