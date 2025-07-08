@@ -40,7 +40,6 @@ class Trivia_Block_Plugin {
 	public function init() {
 		// Hook into WordPress
 		add_action( 'init', array( $this, 'register_block' ) );
-		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ) );
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
 	}
@@ -131,40 +130,6 @@ class Trivia_Block_Plugin {
 		</div>
 		<?php
 		return ob_get_clean();
-	}
-
-	/**
-	 * Enqueue editor assets
-	 */
-	public function enqueue_editor_assets() {
-		$asset_file = TRIVIA_BLOCK_PLUGIN_DIR . 'build/index.asset.php';
-		
-		if ( ! file_exists( $asset_file ) ) {
-			return;
-		}
-
-		$asset = include $asset_file;
-		$js_file = TRIVIA_BLOCK_PLUGIN_URL . 'build/index.js';
-		$css_file = TRIVIA_BLOCK_PLUGIN_URL . 'assets/css/trivia-block-editor.css';
-
-		// Enqueue editor JavaScript
-		wp_enqueue_script(
-			'trivia-block-editor',
-			$js_file,
-			$asset['dependencies'],
-			filemtime( TRIVIA_BLOCK_PLUGIN_DIR . 'build/index.js' ),
-			true
-		);
-
-		// Enqueue editor CSS
-		if ( file_exists( TRIVIA_BLOCK_PLUGIN_DIR . 'assets/css/trivia-block-editor.css' ) ) {
-			wp_enqueue_style(
-				'trivia-block-editor',
-				$css_file,
-				array( 'wp-edit-blocks' ),
-				filemtime( TRIVIA_BLOCK_PLUGIN_DIR . 'assets/css/trivia-block-editor.css' )
-			);
-		}
 	}
 
 	/**

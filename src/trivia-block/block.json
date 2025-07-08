@@ -59,7 +59,6 @@
 		}
 	},
 	"textdomain": "trivia-block",
-	"editorScript": "file:../../build/index.js",
-	"editorStyle": "file:../../assets/css/trivia-block-editor.css",
-	"style": "file:../../assets/css/trivia-block-frontend.css"
+	"editorScript": "file:../index.js",
+	"editorStyle": "file:../../assets/css/trivia-block-editor.css"
 } 
